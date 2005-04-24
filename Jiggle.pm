@@ -27,6 +27,7 @@ use Carp;
 use List::Util qw/ min max /;
 use File::Basename qw/ basename /;
 use Astro::Coords::Angle;
+use Astro::Coords::Offset;
 
 use vars qw/ $VERSION /;
 
@@ -221,6 +222,31 @@ sub xy {
   }
 
   return (\@x, \@y);
+}
+
+=item B<offsets>
+
+Return the jiggle scaled jiggle pattern as a list of C<Astro::Coords::Offset>
+objects.
+
+  @offsets = $jig->offsets;
+
+The objects will be configured as if the pattern * scale factor is in
+tangent plane arcsec offsets.
+
+=cut
+
+sub offsets {
+  my $self = shift;
+
+  my $system = $self->system;
+
+  # Really need to get the position angle in here
+  my @offsets = map { new Astro::Coords::Offset( $_->[0], $_->[1],
+						 system => $system,
+					       )} $self->spattern;
+
+  return @offsets;
 }
 
 =item B<npts>
