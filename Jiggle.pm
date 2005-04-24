@@ -1,21 +1,21 @@
-package JCMT::SMU::JigPattern;
+package JCMT::SMU::Jiggle;
 
 =head1 NAME
 
-JCMT::SMU::JigPattern - find out details of a JCMT SMU jiggle pattern
+JCMT::SMU::Jiggle - find out details of a JCMT SMU jiggle
 
 =head1 SYNOPSIS
 
-  use JCMT::SMU::JigPattern;
+  use JCMT::SMU::Jiggle;
 
-  my $smu = new JCMT::SMU::JigPattern( File => $file );
+  my $smu = new JCMT::SMU::Jiggle( File => $file );
 
 
 =head1 DESCRIPTION
 
-This class enables easy access to jiggle parameters associated
-with a particular jiggle file. This includes the actual offsets and
-the number of jiggle positions.
+This class enables easy access to jiggle parameters associated with a
+particular jiggle configuration. This can include the actual offsets
+and the number of jiggle positions.
 
 =cut
 
@@ -40,9 +40,9 @@ $VERSION = sprintf("%d.%03d", q$Revision$ =~ /(\d+)\.(\d+)/);
 
 =item B<new>
 
-Create a new JigPattern object. Can be created from a filename.
+Create a new Jiggle object. Can be created from a filename.
 
-  $jig = new JCMT::SMU::JigPattern( File => $file );
+  $jig = new JCMT::SMU::Jiggle( File => $file );
 
 A blank object can be configured.
 

@@ -3,13 +3,13 @@
 use Test::More tests => 7;
 use File::Spec;
 
-require_ok( "JCMT::SMU::JigPattern" );
+require_ok( "JCMT::SMU::Jiggle" );
 
 
 my $jigfile = File::Spec->catfile( "t", "data", "smu_3x3.dat" );
 
-my $jig = new JCMT::SMU::JigPattern( File => $jigfile );
-isa_ok( $jig, "JCMT::SMU::JigPattern" );
+my $jig = new JCMT::SMU::Jiggle( File => $jigfile );
+isa_ok( $jig, "JCMT::SMU::Jiggle" );
 
 is( $jig->npts, 9, "Count number of points");
 

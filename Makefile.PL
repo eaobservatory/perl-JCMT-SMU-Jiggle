@@ -1,6 +1,6 @@
 use ExtUtils::MakeMaker;
 WriteMakefile(
-  'NAME'         => 'JCMT::SMU::JigPattern',
-  'VERSION_FROM' => 'JigPattern.pm',
+  'NAME'         => 'JCMT::SMU::Jiggle',
+  'VERSION_FROM' => 'Jiggle.pm',
   'dist'         => { COMPRESS => "gzip -9f" }
   ); 
