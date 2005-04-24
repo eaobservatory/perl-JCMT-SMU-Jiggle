@@ -25,6 +25,8 @@ use warnings;
 use Carp;
 
 use List::Util qw/ min max /;
+use File::Basename qw/ basename /;
+use Astro::Coords::Angle;
 
 use vars qw/ $VERSION /;
 
@@ -42,6 +44,8 @@ Create a new JigPattern object. Can be created from a filename.
 
   $jig = new JCMT::SMU::JigPattern( File => $file );
 
+A blank object can be configured.
+
 =cut
 
 sub new {
@@ -51,15 +55,16 @@ sub new {
   # Read the arguments
   my %args = @_;
 
-  croak "Must specify a file name" unless exists $args{File};
-
   my $jig = bless {
 		   FileName => undef,
+		   PatternName => undef,
 		   Pattern => [],
+		   SYSTEM => 'TRACKING',
+		   PosAng => new Astro::Coords::Angle(0, units => 'rad'),
 		   ScaleFactor => 1,
 		  };
 
-  $jig->_import_file( $args{File} );
+  $jig->_import_file( $args{File} ) if exists $args{File};
 
   return $jig;
 
@@ -69,16 +74,50 @@ sub new {
 
 =over 4
 
+=item B<name>
+
+Name of the pattern file to be used (stripped of path).
+
+Will be set automatically if filename() is invoked.
+
+=cut
+
+sub name {
+  my $self = shift;
+  if (@_) { $self->{PatternName} = shift; }
+  return $self->{PatternName};
+}
+
 =item B<filename>
 
-Name of XML file used to construct the object (if any).
+Full path to SMU jiggle file used to create this object. Not always
+available.
 
 =cut
 
 sub filename {
   my $self = shift;
-  if (@_) { $self->{FileName} = shift; }
+  if (@_) {
+    $self->{FileName} = shift;
+    $self->name( basename( $self->{FileName} ));
+  }
   return $self->{FileName};
+}
+
+=item B<system>
+
+Coordinate system associated with this pattern.
+
+Usually one of "TRACKING", "AZEL", "MOUNT", "FPLANE".
+
+=cut
+
+sub system {
+  my $self = shift;
+  if (@_) {
+    $self->{SYSTEM} = shift;
+  }
+  return $self->{SYSTEM};
 }
 
 =item B<scale>
@@ -95,6 +134,26 @@ sub scale {
   my $self = shift;
   if (@_) { $self->{ScaleFactor} = shift; }
   return $self->{ScaleFactor};
+}
+
+=item B<posang>
+
+The rotation angle to apply to this jiggle pattern. Defaults to
+0 deg but must be in the form of an Astro::Coords::Angle object.
+
+  $jig->posang( $pa );
+
+=cut
+
+sub posang {
+  my $self = shift;
+  if (@_) { 
+    my $pa = shift;
+    croak "posang must be Astro::Coords::Angle object\n"
+      unless UNIVERSAL::isa( $pa, "Astro::Coords::Angle");
+    $self->{PosAng} = $pa;
+  }
+  return $self->{PosAng};
 }
 
 =item B<pattern>
