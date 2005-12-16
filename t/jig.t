@@ -1,6 +1,6 @@
 # -*-perl-*-
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use File::Spec;
 
 require_ok( "JCMT::SMU::Jiggle" );
@@ -21,3 +21,5 @@ is($minmax[0], -3, "X min");
 is($minmax[1],  3, "X max");
 is($minmax[2], -3, "Y min");
 is($minmax[3],  3, "Y max");
+
+ok( $jig->has_origin, "Has an origin");

@@ -166,7 +166,7 @@ x,y pairs in the pattern.
 
 For the above, for a 9 position jiggle, C<@pattern> would contain 9 elements, each of which was a reference to an array containing two elements.
 
-See the C<xy> method to get independy X + Y coordinates.
+See the C<xy> method to get independent X + Y coordinates.
 
 The offsets returned by this method are not scaled.
 
@@ -266,6 +266,22 @@ sub npts {
 =head2 General Methods
 
 =over 4
+
+=item B<has_origin>
+
+Returns true if the jiggle pattern has a point at (0,0), otherwise
+returns false.
+
+=cut
+
+sub has_origin {
+  my $self = shift;
+  my @pattern = $self->pattern;
+  for my $p (@pattern) {
+    return 1 if ($p->[0] == 0.0 && $p->[1] == 0.0);
+  }
+  return 0;
+}
 
 =item B<extent>
 
