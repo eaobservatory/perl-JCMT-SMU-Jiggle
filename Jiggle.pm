@@ -263,6 +263,39 @@ sub npts {
   return scalar(@pattern);
 }
 
+=item B<guess_npts>
+
+Given the name of the jiggle pattern, attemps to guess the number
+of points. If the pattern is defined this method will use the
+C<npts> method directly.
+
+  $n = $jig->guess_npts;
+
+Do not use if you can locate the jiggle pattern.
+
+Returns zero if the pattern name is unfamiliar.
+
+=cut
+
+sub guess_npts {
+  my $self = shift;
+  my $npts = $self->npts;
+  if ($npts) {
+    return $npts;
+  }
+  my $patname = $self->name;
+  if ($patname =~ /harp([\d+])/i) {
+    return ($1 * $1);
+  } elsif ($patname =~ /(\d+)p/) {
+    return $1;
+  } elsif ($patname =~ /(\d+)x(\d+)/) {
+    return ($1 * $2);
+  } else {
+    carp "unrecognized pattern name $patname\n";
+  }
+  return 0;
+}
+
 =head2 General Methods
 
 =over 4
